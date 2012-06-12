@@ -3,6 +3,7 @@
 (function ( Popcorn ) {
 
   var _artists = {},
+      _options,
       lastFMcallback = function( data ) {
         if ( data.artist ) {
           var htmlString = "";
@@ -26,6 +27,9 @@
           htmlString += "</ul></p>";
 
           _artists[ data.artist.name.toLowerCase() ].htmlString = htmlString;
+          
+          _options._container.innerHTML = _artists[ _options.artist ].htmlString;
+          _options._container.style.display = "inline";
         }
       };
 
@@ -63,7 +67,9 @@
         options._container.style.display = "none";
         options._container.innerHTML = "";
         options.artist = options.artist && options.artist.toLowerCase() || "";
-
+        
+        _options = options;
+        
         var target = document.getElementById( options.target );
 
         if ( !target && Popcorn.plugin.debug ) {
