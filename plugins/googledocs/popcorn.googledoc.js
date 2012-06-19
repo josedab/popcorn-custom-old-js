@@ -23,8 +23,9 @@
  * @param src
  *            is the url of the document that we want to display. This field is
  *            optional only if the field identifier is set.
- * @param identifier
- *            is the
+ * @param id
+ *            is the identifier of the document that we want to display. This field is
+ *            optional only if the field src is set.
  * @param preview
  *            indicates if we should show the previsualization or not. This
  *            parameter is optional and is set to true by default.
@@ -36,10 +37,7 @@
  * @param {Object}
  *            options
  * 
- * Example: var p = Popcorn('#video') .googledoc({ start: 5, // seconds end: 15, //
- * seconds type: 'document', src:
- * 'http://www.drumbeat.org/sites/default/files/domain-2/drumbeat_logo.png',
- * text: 'DRUMBEAT', target: 'imagediv' } )
+ * Example: var p = Popcorn('#video') .googledoc({ } )
  * 
  */
   Popcorn.plugin( "googledoc", {
@@ -82,44 +80,82 @@
             optional: true
           }
         }
-      },
-      createDocument: function (htmlElem, options) {
-          // TODO Different types of publication
-      },
-      createSpreadsheet: function (htmlElem, options) {
-          // TODO Different types of publication
-      },
-      createCalendar: function (htmlElem, options) {
-          // TODO Different types of publication
-      },
-      createForm: function (htmlElem, options) {
-          // TODO Different types of publication
       }
       ,
       _setup: function( options ) {
+        
+        
+        function createDocument (htmlElem, options) {
+        // TODO Different types of publication
+        /*
+        https://docs.google.com/document/pub?id=1t8M4vzoy9pdjoiJ0Dq8CVgBRQ2lGBIWz6UJL_k9bVpM
+        <iframe src="https://docs.google.com/document/pub?id=1t8M4vzoy9pdjoiJ0Dq8CVgBRQ2lGBIWz6UJL_k9bVpM&amp;embedded=true"></iframe>
+        */
+        options.url = 'https://docs.google.com/document/pub?id=' + options.id;
+        htmlElem.src = options.url;
+
+        };
+
+        function createSpreadsheet (htmlElem, options) {
+            // https://docs.google.com/spreadsheet/pub?key=0AjOfr6eosPR_dEx5YXNJczBhYXRzSUJIU0NuS1NzUWc&output=html
+            // <iframe width='500' height='300' frameborder='0' src='https://docs.google.com/spreadsheet/pub?key=0AjOfr6eosPR_dEx5YXNJczBhYXRzSUJIU0NuS1NzUWc&output=html&widget=true'></iframe>
+            
+            options.url = 'https://docs.google.com/spreadsheet/pub?key=' + options.id;
+
+            htmlElem.src = options.url + '&output=html&widget=true';
+            
+        };
+
+        function createCalendar (htmlElem, options) {
+            // TODO Different types of publication
+            
+            
+        };
+
+        function createForm (htmlElem, options) {
+            // <iframe src="https://docs.google.com/spreadsheet/viewform?formkey=dEx5YXNJczBhYXRzSUJIU0NuS1NzUWc6MQ" frameborder="0" width="480" height="389" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+
+            options.url = 'https://docs.google.com/spreadsheet/viewform?formkey=' + options.id;
+
+            htmlElem.src = options.url;
+            htmlElem.allowfullscreen = true;
+            htmlElem.mozallowfullscreen = true;
+            htmlElem.webkitallowfullscreen = true;
+            
+        };
+
+        function createDrawing (htmlElem, options) {
+            // <img src="https://docs.google.com/drawings/pub?id=1zxmvwG1WNbymsq1Ndnk8Jr-SCoI3zczAVTNfMzTDOvE&amp;w=1058&amp;h=1069">
+
+            htmlElem = document.createElement( "img" );
+            htmlElem.src = 'https://docs.google.com/drawings/pub?id=' + options.id + '&amp;w=' + options.width + '&amp;h=' + options.height;
+        };
+
+        // Example: 
+        // https://docs.google.com/spreadsheet/pub?key=0AjOfr6eosPR_dEx5YXNJczBhYXRzSUJIU0NuS1NzUWc&output=pdf
+        // https://docs.google.com/spreadsheet/pub?key=0AjOfr6eosPR_dEx5YXNJczBhYXRzSUJIU0NuS1NzUWc&output=html
+        function getOutputUrlForFormat (url,format) {
+            var result = url;
+            if (result.indexOf("output") < 0) {
+                result = result + "&output=" + format;
+            } 
+            else {
+                result = result.replace(/output=[^&]+/,'ouput=' + format);
+            }
+            return result;
+        }
+
         var htmlElement = document.createElement( "iframe" ),
             target = document.getElementById( options.target );
         
-        // TODO
         // Check for the options.preview
+        htmlElement.width = options.width;
+        htmlElement.height= options.height;
+        htmlElement.frameborder = 0;
         
-        // Cheap check format of the google docs url
-        // We are accepting http and https.
-        if (options.src.indexOf("docs.google.com") < 10) {
-            
-            htmlElement.src = options.src;
-            htmlElement.width = options.width;
-            htmlElement.height= options.height;
-            
-        } else {
-            
-            throw new Error(
-                    "Url for google docs should have the form https://docs.google.com...");
-        }
-        
-        /*
         switch (options.type) {
         case 'document':
+            // Redefine the url adding the embedded parameter
             createDocument(htmlElement, options);
             break;
         case 'spreadsheet':
@@ -138,7 +174,7 @@
         default:
             break;
         }
-        */
+        
         if ( !target && Popcorn.plugin.debug ) {
           throw new Error( "target container doesn't exist" );
         }
@@ -152,7 +188,7 @@
       },
 
       /**
-       * @member image
+       * @member gdoc
        * The start function will be executed when the currentTime
        * of the video  reaches the start time provided by the
        * options variable
@@ -161,7 +197,7 @@
         options._container.style.display = "inline";
       },
       /**
-       * @member image
+       * @member gdoc
        * The end function will be executed when the currentTime
        * of the video  reaches the end time provided by the
        * options variable
