@@ -91,12 +91,12 @@
             elem: "input",
             type: "number",
             label: "Height"
-          }
+          },
           target: {
             elem: "input",
             type: "text",
-            label: "Target"
-            "default": "googledoc-container",
+            label: "Target",
+            "default": "googledoc-container"
           }
         }
       }
