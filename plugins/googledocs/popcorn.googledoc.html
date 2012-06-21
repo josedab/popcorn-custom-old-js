@@ -10,10 +10,9 @@
       var p = Popcorn( "#video" )
       .volume( 0 )
       .play()
+      // Form
       .googledoc({
-      	// seconds
         start: 1,
-        // seconds
         end: 15,
         id: "dEx5YXNJczBhYXRzSUJIU0NuS1NzUWc6MQ",
         type: "form",
@@ -21,14 +20,43 @@
         width: 480,
         height: 389
       })
+      // Document
       .googledoc({
-       // seconds
           start: 5,
-          // seconds
-          end: 25,
+          end: 15,
           id: "1t8M4vzoy9pdjoiJ0Dq8CVgBRQ2lGBIWz6UJL_k9bVpM",
           type: "document",
           target: "gdocform2",
+          width: 480,
+          height: 389
+      })
+      // Spreadsheet
+      .googledoc({
+          start: 3,
+          end: 10,
+          id: "0AjOfr6eosPR_dDJpZHMwdGxqMHBCaU1oeGdsNVBKenc",
+          type: "spreadsheet",
+          target: "gdocform3",
+          width: 500,
+          height: 300
+      })
+      // Presentation
+      .googledoc({
+          start: 7,
+          end: 20,
+          id: "1OZ_38UKI3IVwGqZJu2mMgpSHjsMmy6mcAx03Z3Y7KqY",
+          type: "presentation",
+          target: "gdocform4",
+          width: 480,
+          height: 389
+      })
+      // Drawing
+      .googledoc({
+          start: 8,
+          end: 16,
+          id: "1pwj9ixd8eMdVt9byzcosMANL60HCo-xytopABFXtrFU",
+          type: "drawing",
+          target: "gdocform5",
           width: 480,
           height: 389
       });
@@ -37,10 +65,13 @@
   </script>
 </head>
 <body>
-  <h1 id="qunit-header">Popcorn Image Plug-in Demo</h1>
-  <p> Two images will appear at 5 seconds.</p>
-  <p> First one (with an overlayed text) will disappear at 15 seconds.</p>
-  <p> Second one (without an overlayed text) will disappear at 45 seconds.</p>
+  <h1 id="qunit-header">Popcorn Google Doc Plug-in Demo</h1>
+  <p> 5 documents will appear during the video in the first 20 minutes.</p>
+  <p> First one, a <b>Form</b> will appear at second 1 and disappear second 15.</p>
+  <p> Second one, a <b>Document</b> will appear at second 5 and disappear second 15.</p>
+  <p> Third one, a <b>Spreadsheet</b> will appear at second 3 and disappear second 10.</p>
+  <p> Fourth one, a <b>Presentation</b> will appear at second 7 and disappear second 20.</p>
+  <p> Fifth one, a <b>Drawing</b> will appear at second 8 and disappear second 16.</p>
   <div>
     <video id="video"
       controls
@@ -61,6 +92,9 @@
   </div>
   <div style="width:500px; height:500px" id="gdocform1"></div>
   <div style="width:500px; height:500px" id="gdocform2"></div>
+  <div style="width:500px; height:500px" id="gdocform3"></div>
+  <div style="width:500px; height:500px" id="gdocform4"></div>
+  <div style="width:500px; height:500px" id="gdocform5"></div>
 
 </body>
 </html>
