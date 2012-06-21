@@ -125,10 +125,20 @@
         };
 
         function createDrawing (htmlElem, options) {
+        
             // <img src="https://docs.google.com/drawings/pub?id=1zxmvwG1WNbymsq1Ndnk8Jr-SCoI3zczAVTNfMzTDOvE&amp;w=1058&amp;h=1069">
 
-            htmlElem = document.createElement( "img" );
-            htmlElem.src = 'https://docs.google.com/drawings/pub?id=' + options.id + '&amp;w=' + options.width + '&amp;h=' + options.height;
+            htmlElem.src = 'https://docs.google.com/drawings/pub?id=' + options.id + '&w=' + options.width + '&h=' + options.height;
+        };
+
+        function createPresentation (htmlElem, options) {
+            // <iframe src="https://docs.google.com/presentation/embed?id=1OZ_38UKI3IVwGqZJu2mMgpSHjsMmy6mcAx03Z3Y7KqY&start=false&loop=false&delayms=3000" frameborder="0" width="960" height="749" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+            options.url = 'https://docs.google.com/presentation/embed?id=' + options.id + '&start=false&loop=false&delayms=3000';
+
+            htmlElem.src = options.url;
+            htmlElem.allowfullscreen = true;
+            htmlElem.mozallowfullscreen = true;
+            htmlElem.webkitallowfullscreen = true;
         };
 
         // Example: 
@@ -165,10 +175,14 @@
             createCalendar(htmlElement, options);
             break;
         case 'drawing':
+            htmlElement = document.createElement( "img" );
             createDrawing(htmlElement, options);
             break;
         case 'form':
             createForm(htmlElement, options);
+            break;
+        case 'presentation':
+            createPresentation(htmlElement, options);
             break;
         
         default:
