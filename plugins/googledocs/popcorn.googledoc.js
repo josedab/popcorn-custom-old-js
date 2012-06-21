@@ -37,7 +37,20 @@
  * @param {Object}
  *            options
  * 
- * Example: var p = Popcorn('#video') .googledoc({ } )
+ * Example: 
+ * var p = Popcorn( "#video" )
+ *     .volume( 0 )
+ *     .play()
+ *     // Form
+ *     .googledoc({
+ *       start: 1,
+ *       end: 15,
+ *       id: "dEx5YXNJczBhYXRzSUJIU0NuS1NzUWc6MQ",
+ *       type: "form",
+ *       target: "gdocform1",
+ *       width: 480,
+ *       height: 389
+ *     })
  * 
  */
   Popcorn.plugin( "googledoc", {
@@ -46,7 +59,7 @@
           name: "Google Docs Plugin",
           version: "0.1",
           author: "Jose David Baena",
-          website: "http://josedab.com.com/"
+          website: "http://josedab.com/"
         },
         options: {
           start: {
@@ -59,25 +72,31 @@
             type: "number",
             label: "Out"
           },
-          href: {
-            elem: "input",
-            type: "url",
-            label: "anchor URL",
-            "default": "http://mozillapopcorn.org/wp-content/themes/popcorn/images/for_developers.png",
-            optional: true
-          },
-          target: "image-container",
-          src: {
-            elem: "input",
-            type: "url",
-            label: "Source URL",
-            "default": "http://mozillapopcorn.org/wp-content/themes/popcorn/images/for_developers.png"
-          },
-          text: {
+          id: {
             elem: "input",
             type: "text",
-            label: "Text",
-            optional: true
+            label: "Identifier"
+          },
+          type: {
+            elem: "input",
+            type: "text",
+            label: "Type"
+          },
+          width: {
+            elem: "input",
+            type: "number",
+            label: "Width"
+          },
+          height: {
+            elem: "input",
+            type: "number",
+            label: "Height"
+          }
+          target: {
+            elem: "input",
+            type: "text",
+            label: "Target"
+            "default": "googledoc-container",
           }
         }
       }
@@ -86,7 +105,6 @@
         
         
         function createDocument (htmlElem, options) {
-        // TODO Different types of publication
         /*
         https://docs.google.com/document/pub?id=1t8M4vzoy9pdjoiJ0Dq8CVgBRQ2lGBIWz6UJL_k9bVpM
         <iframe src="https://docs.google.com/document/pub?id=1t8M4vzoy9pdjoiJ0Dq8CVgBRQ2lGBIWz6UJL_k9bVpM&amp;embedded=true"></iframe>
@@ -186,6 +204,7 @@
             break;
         
         default:
+            throw new Error( "Type of the google doc not specified" );
             break;
         }
         
@@ -202,7 +221,7 @@
       },
 
       /**
-       * @member gdoc
+       * @member googledoc
        * The start function will be executed when the currentTime
        * of the video  reaches the start time provided by the
        * options variable
@@ -210,8 +229,9 @@
       start: function( event, options ) {
         options._container.style.display = "inline";
       },
+      
       /**
-       * @member gdoc
+       * @member googledoc
        * The end function will be executed when the currentTime
        * of the video  reaches the end time provided by the
        * options variable
